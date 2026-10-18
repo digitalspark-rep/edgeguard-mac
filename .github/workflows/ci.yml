@@ -1,0 +1,17 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build all targets
+        run: swift build
+      - name: Unit tests
+        run: swift test
+      - name: Evaluation harness (rule-based baseline)
+        run: swift run edgeguard-eval examples/eval/labeled-flows.json

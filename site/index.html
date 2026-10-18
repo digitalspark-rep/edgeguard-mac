@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EdgeGuard Mac — The Open-Source AI Firewall for macOS | DigitalSpark</title>
+<meta name="description" content="EdgeGuard is an open-source AI firewall for macOS. It watches outbound traffic, decides with AI, and blocks confirmed threats on its own within guardrails you set.">
+<link rel="canonical" href="https://rootop.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rootop.net/">
+<meta property="og:title" content="EdgeGuard Mac — The Open-Source AI Firewall for macOS">
+<meta property="og:description" content="An AI firewall that triages, blocks and explains threats on its own, with guardrails and one-click undo. Built by DigitalSpark.">
+<meta property="og:image" content="https://rootop.net/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="EdgeGuard Mac by DigitalSpark">
+<meta name="twitter:description" content="Open-source AI firewall for macOS that acts on its own within guardrails.">
+<meta name="twitter:image" content="https://rootop.net/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2322d3ee' d='M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','-apple-system','BlinkMacSystemFont','sans-serif'],mono:['JetBrains Mono','ui-monospace','monospace']},colors:{ink:'#090D16',panel:'#0F172A',line:'#1E293B'}}}}</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+<style>
+[x-cloak]{display:none!important}
+body{background:#090D16;color:#cbd5e1;-webkit-font-smoothing:antialiased}
+.grid-bg{background-image:linear-gradient(#1e293b55 1px,transparent 1px),linear-gradient(90deg,#1e293b55 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 30%,transparent 80%);-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 30%,transparent 80%)}
+.glow-btn{background:linear-gradient(135deg,#0891b2,#4f46e5);box-shadow:0 0 28px -6px #22d3ee99}
+.glow-btn:hover{box-shadow:0 0 38px -4px #22d3eecc}
+.card{background:#0F172A;border:1px solid #1E293B;border-radius:14px}
+.pulse-dot{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+:focus-visible{outline:2px solid #22d3ee;outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body class="font-sans" x-data="{menu:false}">
+
+<header class="fixed top-0 inset-x-0 z-50 border-b border-line bg-ink/80 backdrop-blur">
+  <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2 text-white font-semibold text-lg">
+      <span class="grid place-items-center w-8 h-8 rounded-lg bg-cyan-400/10 ring-1 ring-cyan-400/40"><i data-lucide="shield-check" class="w-4 h-4 text-cyan-300"></i></span>EdgeGuard
+    </a>
+    <nav class="hidden md:flex items-center gap-7 text-sm">
+      <a href="#features" class="hover:text-white transition">Features</a>
+      <a href="#autonomy" class="hover:text-white transition">Autonomy</a>
+      <a href="#guardrails" class="hover:text-white transition">Guardrails</a>
+      <a href="#open-source" class="hover:text-white transition">Open source</a>
+      <a href="#about" class="hover:text-white transition">About</a>
+    </nav>
+    <a href="https://github.com/digitalspark-rep/edgeguard-mac" class="hidden md:inline-flex items-center gap-2 glow-btn text-white text-sm font-medium px-4 py-2 rounded-lg transition"><i data-lucide="github" class="w-4 h-4"></i>View on GitHub</a>
+    <button class="md:hidden text-white p-2" @click="menu=!menu" aria-label="Toggle menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
+  </div>
+  <div x-show="menu" x-cloak x-transition class="md:hidden border-t border-line bg-ink px-5 py-4 grid gap-3 text-sm" @click="menu=false">
+    <a href="#features">Features</a><a href="#autonomy">Autonomy</a><a href="#guardrails">Guardrails</a><a href="#open-source">Open source</a><a href="#about">About</a>
+    <a href="https://github.com/digitalspark-rep/edgeguard-mac" class="glow-btn text-white text-center font-medium px-4 py-2.5 rounded-lg">View on GitHub</a>
+  </div>
+</header>
+
+<main>
+<section class="relative pt-32 pb-20 overflow-hidden">
+  <div class="grid-bg absolute inset-0 -z-10"></div>
+  <div class="absolute -z-10 top-10 left-1/2 -translate-x-1/2 w-[640px] h-[320px] rounded-full bg-cyan-500/10 blur-3xl"></div>
+  <div class="max-w-6xl mx-auto px-5 grid lg:grid-cols-2 gap-14 items-center">
+    <div>
+      <span class="inline-flex items-center gap-2 text-xs font-medium text-cyan-300 border border-cyan-400/30 bg-cyan-400/5 rounded-full px-3 py-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot"></span>Open-source AI firewall • Native macOS • AI-powered decisions
+      </span>
+      <h1 class="mt-6 text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold text-white tracking-tight leading-[1.08]">The AI Firewall That Handles Threats for You</h1>
+      <p class="mt-5 text-lg text-slate-400 max-w-xl">EdgeGuard watches outbound traffic on your Mac, decides which connections are dangerous, and blocks confirmed threats on its own. You set how much it may do, and every action is logged and reversible.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="https://github.com/digitalspark-rep/edgeguard-mac" class="glow-btn text-white font-medium px-6 py-3 rounded-lg transition inline-flex items-center gap-2"><i data-lucide="github" class="w-4 h-4"></i>Star on GitHub</a>
+        <a href="#autonomy" class="border border-line bg-panel hover:border-slate-500 text-white font-medium px-6 py-3 rounded-lg transition">See what it automates</a>
+      </div>
+      <p class="mt-5 text-xs text-slate-500 font-mono">Swift · macOS 13+ · MIT license · early development</p>
+    </div>
+
+    <div class="relative" x-data="{sel:0, items:[
+      {p:'node',d:'45.83.64.12:4444',s:'high',st:'Blocked automatically',t:'Possible reverse shell',c:'97%',e:'node opened a long-lived outbound connection to an unfamiliar host on a port often used for remote shells. EdgeGuard blocked it for 1 hour and logged the decision.',undo:true},
+      {p:'Dropbox',d:'162.125.1.18:443',s:'ok',st:'Allowed',t:'Expected sync traffic',c:'99%',e:'Matches the normal pattern for a file-sync client on HTTPS. Judged on the Mac, nothing was sent to the AI.',undo:false},
+      {p:'curl',d:'cdn-update.top:80',s:'med',st:'Needs your approval',t:'Unusual download source',c:'62%',e:'curl is fetching data over plain HTTP from a domain with no history on this Mac. Confidence is below your auto-block threshold, so EdgeGuard asks you.',undo:false}]}">
+      <div class="rounded-t-xl bg-slate-900/90 border border-line px-4 py-2 flex items-center justify-between text-[11px] text-slate-300">
+        <div class="flex items-center gap-4"><i data-lucide="apple" class="w-3.5 h-3.5"></i><b class="text-white">Finder</b><span>File</span><span>Edit</span><span>View</span></div>
+        <div class="flex items-center gap-3"><span class="flex items-center gap-1 text-cyan-300 bg-cyan-400/10 px-1.5 py-0.5 rounded"><i data-lucide="shield-alert" class="w-3 h-3"></i>1</span><i data-lucide="wifi" class="w-3.5 h-3.5"></i><span>Sun 18 Oct 14:02</span></div>
+      </div>
+      <div class="card rounded-t-none border-t-0 shadow-[0_30px_80px_-20px_#22d3ee33] p-4 sm:p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2 text-white text-sm font-semibold"><i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>EdgeGuard<span class="text-[10px] font-normal text-cyan-300 bg-cyan-400/10 px-1.5 py-0.5 rounded">Auto mode</span></div>
+          <span class="text-[11px] text-slate-500 font-mono">interface preview</span>
+        </div>
+        <div class="space-y-1.5">
+          <template x-for="(it,i) in items" :key="i">
+            <button @click="sel=i" class="w-full text-left flex items-center gap-3 rounded-lg px-3 py-2 border transition" :class="sel===i?'border-cyan-400/40 bg-cyan-400/5':'border-transparent hover:bg-slate-800/60'">
+              <span class="w-2 h-2 rounded-full shrink-0" :class="it.s==='high'?'bg-rose-500 pulse-dot':it.s==='med'?'bg-amber-400':'bg-emerald-400'"></span>
+              <span class="text-sm text-white font-medium w-20 shrink-0" x-text="it.p"></span>
+              <span class="text-xs font-mono text-slate-400 truncate" x-text="it.d"></span>
+            </button>
+          </template>
+        </div>
+        <div class="mt-3 rounded-lg border border-violet-400/30 bg-violet-400/5 p-3.5">
+          <div class="flex items-center justify-between text-xs mb-1.5"><span class="flex items-center gap-2 text-violet-300"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i>AI decision</span><span class="text-slate-400">confidence <b class="text-white" x-text="items[sel].c"></b></span></div>
+          <p class="text-sm text-white font-medium"><span x-text="items[sel].st"></span> · <span class="font-normal text-slate-300" x-text="items[sel].t"></span></p>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed" x-text="items[sel].e"></p>
+          <div class="mt-3 flex gap-2" x-show="items[sel].undo"><button class="text-xs border border-line text-slate-300 hover:text-white px-3 py-1.5 rounded-md">Undo block</button></div>
+          <div class="mt-3 flex gap-2" x-show="items[sel].st==='Needs your approval'"><button class="text-xs bg-rose-500/90 hover:bg-rose-500 text-white px-3 py-1.5 rounded-md">Block</button><button class="text-xs border border-line text-slate-300 hover:text-white px-3 py-1.5 rounded-md">Allow once</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="py-20 border-t border-line">
+  <div class="max-w-6xl mx-auto px-5">
+    <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight max-w-2xl">A firewall that does the work, not just the logging</h2>
+    <p class="mt-3 text-slate-400 max-w-2xl">Small remote teams have no one to watch a security console. EdgeGuard takes over the routine decisions and only interrupts you when a human is needed.</p>
+    <div class="mt-10 grid sm:grid-cols-2 gap-5">
+      <div class="card p-6 hover:border-cyan-400/40 transition"><i data-lucide="filter" class="w-6 h-6 text-cyan-300"></i><h3 class="mt-4 text-white font-semibold text-lg">Automatic triage</h3><p class="mt-2 text-sm text-slate-400">Rules on the Mac clear routine traffic instantly. Only unusual connections go to the AI, so nothing noisy reaches you and API usage stays low.</p></div>
+      <div class="card p-6 hover:border-violet-400/40 transition"><i data-lucide="brain-circuit" class="w-6 h-6 text-violet-300"></i><h3 class="mt-4 text-white font-semibold text-lg">AI-made decisions</h3><p class="mt-2 text-sm text-slate-400">For each flagged connection, the AI returns a verdict: allow, block or ask, with a confidence score and a plain-language reason.</p></div>
+      <div class="card p-6 hover:border-emerald-400/40 transition"><i data-lucide="shield-ban" class="w-6 h-6 text-emerald-300"></i><h3 class="mt-4 text-white font-semibold text-lg">Self-managing block rules</h3><p class="mt-2 text-sm text-slate-400">Confirmed threats are blocked automatically. Rules expire on their own, so a wrong call never locks you out for long.</p></div>
+      <div class="card p-6 hover:border-cyan-400/40 transition"><i data-lucide="scroll-text" class="w-6 h-6 text-cyan-300"></i><h3 class="mt-4 text-white font-semibold text-lg">Audit trail for every action</h3><p class="mt-2 text-sm text-slate-400">Each decision is recorded with the evidence and the reason, so you can review what the firewall did and why.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="autonomy" class="py-20 border-t border-line bg-panel/40">
+  <div class="max-w-6xl mx-auto px-5">
+    <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight max-w-2xl">You choose how much it does on its own</h2>
+    <p class="mt-3 text-slate-400 max-w-2xl">Start by watching. Move to automatic blocking when you trust the decisions.</p>
+    <div class="mt-10 grid md:grid-cols-3 gap-5">
+      <div class="card p-6"><i data-lucide="eye" class="w-6 h-6 text-slate-200"></i><h3 class="mt-4 text-white font-semibold text-lg">Monitor</h3><p class="mt-2 text-sm text-slate-400">Observes and explains. Never blocks anything. The safe way to see what EdgeGuard would do on your Mac.</p></div>
+      <div class="card p-6"><i data-lucide="hand" class="w-6 h-6 text-amber-300"></i><h3 class="mt-4 text-white font-semibold text-lg">Suggest</h3><p class="mt-2 text-sm text-slate-400">Recommends a block with its reasoning and waits for your approval. This is the default mode.</p></div>
+      <div class="card p-6 border-cyan-400/40"><i data-lucide="zap" class="w-6 h-6 text-cyan-300"></i><h3 class="mt-4 text-white font-semibold text-lg">Auto</h3><p class="mt-2 text-sm text-slate-400">Blocks high-severity threats by itself when the model is confident enough. Everything else still asks you.</p></div>
+    </div>
+    <div class="mt-10 card overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-2.5 border-b border-line text-xs text-slate-400 font-mono"><span>Sources/EdgeGuardCore/FirewallEngine.swift</span><span class="text-cyan-300">excerpt</span></div>
+      <pre class="p-4 text-[12.5px] leading-relaxed font-mono overflow-x-auto text-slate-300"><code><span class="text-violet-300">let</span> canBlock = verdict.action == .block
+    &amp;&amp; verdict.severity == .high
+    &amp;&amp; verdict.confidence &gt;= policy.minConfidence
+    &amp;&amp; !policy.protectedProcesses.contains(flow.process)
+
+<span class="text-violet-300">guard</span> canBlock <span class="text-violet-300">else</span> { <span class="text-violet-300">return</span> ask(user, verdict) }   <span class="text-slate-500">// a human decides</span>
+rules.append(BlockRule(..., expiresAt: now().addingTimeInterval(policy.blockTTL)))</code></pre>
+    </div>
+  </div>
+</section>
+
+<section id="guardrails" class="py-20 border-t border-line">
+  <div class="max-w-6xl mx-auto px-5 grid lg:grid-cols-2 gap-10">
+    <div>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Guardrails and privacy</h2>
+      <p class="mt-3 text-slate-400">An autonomous firewall must be careful. These limits are enforced in code and covered by unit tests.</p>
+    </div>
+    <ul class="space-y-4 text-sm">
+      <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 mt-0.5 text-emerald-400 shrink-0"></i><span><b class="text-white">Confidence threshold.</b> Automatic blocks need a high-severity block verdict above the confidence you set.</span></li>
+      <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 mt-0.5 text-emerald-400 shrink-0"></i><span><b class="text-white">Protected system processes.</b> Core macOS services are never blocked automatically.</span></li>
+      <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 mt-0.5 text-emerald-400 shrink-0"></i><span><b class="text-white">Fail safe.</b> If the AI is unreachable or answers badly, EdgeGuard asks you and blocks nothing.</span></li>
+      <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 mt-0.5 text-emerald-400 shrink-0"></i><span><b class="text-white">Temporary and reversible.</b> Automatic blocks expire after one hour by default and can be undone.</span></li>
+      <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 mt-0.5 text-emerald-400 shrink-0"></i><span><b class="text-white">Metadata only.</b> The AI sees process name, remote host, port, protocol and byte count, never packet contents. User paths are removed and private addresses masked. Requests set <code class="font-mono text-slate-200">store: false</code>.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section id="open-source" class="py-20 border-t border-line bg-panel/40">
+  <div class="max-w-6xl mx-auto px-5">
+    <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight max-w-2xl">Built in the open</h2>
+    <p class="mt-3 text-slate-400 max-w-2xl">EdgeGuard is MIT-licensed. This is where the project stands today.</p>
+    <div class="mt-8 grid md:grid-cols-2 gap-5">
+      <div class="card divide-y divide-line">
+        <div class="flex items-center justify-between p-4 text-sm"><span class="text-white">Core library and command-line tool</span><span class="text-emerald-300 bg-emerald-400/10 px-2 py-0.5 rounded text-xs">Available</span></div>
+        <div class="flex items-center justify-between p-4 text-sm"><span class="text-white">Redaction and local triage rules</span><span class="text-emerald-300 bg-emerald-400/10 px-2 py-0.5 rounded text-xs">Available</span></div>
+        <div class="flex items-center justify-between p-4 text-sm"><span class="text-white">AI decisions via an API</span><span class="text-emerald-300 bg-emerald-400/10 px-2 py-0.5 rounded text-xs">Available</span></div>
+        <div class="flex items-center justify-between p-4 text-sm"><span class="text-white">Autonomy engine: modes, guardrails, expiring rules, audit log</span><span class="text-emerald-300 bg-emerald-400/10 px-2 py-0.5 rounded text-xs">Available</span></div>
+        <div class="flex items-center justify-between p-4 text-sm"><span class="text-white">Evaluation harness, cost controls, saved state</span><span class="text-emerald-300 bg-emerald-400/10 px-2 py-0.5 rounded text-xs">Available</span></div>
+        <div class="flex items-center justify-between p-4 text-sm"><span class="text-white">Menu bar app</span><span class="text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded text-xs">Preview with demo flows</span></div>
+        <div class="flex items-center justify-between p-4 text-sm"><span class="text-white">NetworkExtension enforcement on real traffic</span><span class="text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded text-xs">In development</span></div>
+        <div class="flex items-center justify-between p-4 text-sm"><span class="text-white">Shared team policies</span><span class="text-slate-300 bg-slate-400/10 px-2 py-0.5 rounded text-xs">Planned</span></div>
+      </div>
+      <div class="card p-6 flex flex-col justify-between">
+        <div><i data-lucide="github" class="w-8 h-8 text-white"></i><h3 class="mt-4 text-white font-semibold text-lg">Read the code, open an issue, send a pull request</h3><p class="mt-2 text-sm text-slate-400">The repository includes architecture notes, an autonomy and guardrails guide, a threat model, an evaluation method, a roadmap, a security policy and contribution guidelines.</p></div>
+        <a href="https://github.com/digitalspark-rep/edgeguard-mac" class="mt-6 glow-btn text-white text-center font-medium px-5 py-3 rounded-lg transition">Open the GitHub project</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="py-20 border-t border-line">
+  <div class="max-w-6xl mx-auto px-5 grid lg:grid-cols-2 gap-10">
+    <div>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">About DigitalSpark</h2>
+      <p class="mt-4 text-slate-400">DigitalSpark builds autonomous security tools for small remote teams. EdgeGuard Mac, our first product, is an AI firewall that handles routine threats so nobody has to watch a console. We are an early-stage startup incubated by the Fundacja Rozwoju Przedsiębiorczości “Twój StartUp” in Warsaw, Poland.</p>
+      <p class="mt-3 text-slate-400">Questions, partnership requests and press enquiries are welcome.</p>
+    </div>
+    <div class="card p-6 text-sm space-y-4">
+      <div class="flex gap-3"><i data-lucide="building-2" class="w-4 h-4 mt-0.5 text-cyan-300 shrink-0"></i><div><p class="text-white font-medium">Fundacja Rozwoju Przedsiębiorczości “Twój StartUp”</p><p class="text-slate-400">ul. Żurawia 6/12, lok. 766, 00-503 Warszawa, Poland</p><p class="text-slate-500 text-xs mt-1 font-mono">NIP 5213641211 · REGON 146433467 · KRS 0000442857</p></div></div>
+      <div class="flex gap-3"><i data-lucide="mail" class="w-4 h-4 mt-0.5 text-cyan-300 shrink-0"></i><div><a href="mailto:euro@twojstartup.pl" class="text-white hover:text-cyan-300">euro@twojstartup.pl</a> <span class="text-slate-500">(English-speaking team)</span><br><a href="mailto:biuro@twojstartup.pl" class="text-slate-300 hover:text-cyan-300">biuro@twojstartup.pl</a></div></div>
+      <div class="flex gap-3"><i data-lucide="phone" class="w-4 h-4 mt-0.5 text-cyan-300 shrink-0"></i><div><a href="tel:+48881767270" class="text-white hover:text-cyan-300">+48 881 767 270</a> <span class="text-slate-500">(English-speaking customers)</span></div></div>
+      <div class="flex gap-3"><i data-lucide="globe" class="w-4 h-4 mt-0.5 text-cyan-300 shrink-0"></i><a href="https://twojstartup.pl/kontakt/" class="text-slate-300 hover:text-cyan-300">twojstartup.pl/kontakt</a></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="border-t border-line py-10">
+  <div class="max-w-6xl mx-auto px-5 flex flex-col md:flex-row md:items-center justify-between gap-5 text-sm">
+    <div class="flex items-center gap-2 text-white font-semibold"><i data-lucide="shield-check" class="w-4 h-4 text-cyan-300"></i>EdgeGuard <span class="text-slate-500 font-normal">by DigitalSpark</span></div>
+    <nav class="flex flex-wrap gap-x-6 gap-y-2">
+      <a href="https://github.com/digitalspark-rep/edgeguard-mac" class="hover:text-white">GitHub</a>
+      <a href="https://github.com/digitalspark-rep/edgeguard-mac/blob/main/docs/AUTONOMY.md" class="hover:text-white">Autonomy and guardrails</a>
+      <a href="https://github.com/digitalspark-rep/edgeguard-mac/blob/main/docs/PRIVACY.md" class="hover:text-white">Data handling</a>
+      <a href="https://github.com/digitalspark-rep/edgeguard-mac/blob/main/SECURITY.md" class="hover:text-white">Security policy</a>
+      <a href="https://twojstartup.pl/polityka-prywatnosci/" class="hover:text-white">Privacy policy</a>
+    </nav>
+    <p class="text-slate-500">© 2026 DigitalSpark. EdgeGuard is MIT licensed.</p>
+  </div>
+</footer>
+<script>
+document.addEventListener('alpine:initialized',()=>lucide.createIcons());
+window.addEventListener('load',()=>lucide.createIcons());
+</script>
+</body>
+</html>
